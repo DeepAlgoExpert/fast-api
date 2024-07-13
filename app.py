@@ -12,11 +12,11 @@ app = FastAPI()
 class PoseKeypoints(BaseModel):
     pose_keypoints_2d: List[List[float]]
 
-@app.post("/process_pose_keypoints/")
+@app.post("/diffusionmix/")
 async def process_pose_keypoints(
     data: str = Form(...),
     model_parse: UploadFile = File(...),
-    tops: str = Form(...),  # New string parameter
+    face: str = Form(...),  # New string parameter
 ):
     pose_keypoints = PoseKeypoints.parse_raw(data)
     image_content = await model_parse.read()
@@ -46,5 +46,5 @@ async def process_pose_keypoints(
         "received_data": pose_keypoints.dict(),
         "mask": mask_base64,
         "mask_gray": mask_gray_base64,
-        "tops": tops  # Include the new parameter in the response
+        "face": face  # Include the new parameter in the response
     }
